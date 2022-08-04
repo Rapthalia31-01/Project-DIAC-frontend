@@ -79,31 +79,36 @@
           <div class="mb-4 col-3">
             <label for="estudiante" class="form-label center"><b>Ciudad:</b></label>
             <select formControlName="ciudad" type="text" class="form-select" id="ciudad" aria-describedby="textHelp"
-              name="ciudad" required>
+              name="ciudad" (change)="otraCiudadFunc()" required>
               <option value="0" selected>Seleccionar ciudad</option>
               <option value="manta">Manta</option>
               <option value="guayaquil">Guayaquil</option>
               <option value="quito">Quito</option>
-              <option value="otra">Otra..</option>
+              <option value="">Otra..</option>
             </select>
             <span *ngIf="!(validSelect('ciudad').valid)" class="text-danger d-block mt-2">
               {{(validSelect('ciudad').messagge)}}
             </span>
+            <input *ngIf="otraCiudad" type="text" class="form-control mt-2" placeholder="ingrese ciudad" formControlName="ciudad" name="ciudad">
+
           </div>
           <div class="mb-4 col-3">
             <label for="estudiante" class="form-label center"><b>Provincia:</b></label>
             <select formControlName="Provincia" type="text" class="form-select" id="provincia"
-              aria-describedby="textHelp" name="provincia" required>
+              aria-describedby="textHelp" name="provincia" (change)="otraProvinciaFunc()" required>
               <option value="0" selected>Seleccionar provincia</option>
               <option value="manabi">Manabí</option>
               <option value="guayas">Guayas</option>
               <option value="los rios">Los Rios</option>
-              <option value="otra">Otra..</option>
+              <option value="">Otra..</option>
             </select>
             <span *ngIf="!(validSelect('Provincia').valid)" class="text-danger d-block mt-2">
               {{(validSelect('Provincia').messagge)}}
             </span>
+            
+            <input *ngIf="otraProvincia" type="text" class="form-control mt-2" placeholder="ingrese provincia" formControlName="Provincia" name="provincia">
           </div>
+  
           <div class="mb-3 col-12 col-md-2 col-lg-2">
             <label for="codigo" class="form-label">Codigo Postal :</label>
             <input formControlName="codigoPostal" type="number" class="form-control mb-2" id="codigo"

@@ -1,9 +1,9 @@
 export interface ItemPage {
-  id: number,
-  description: string,
-  link: string,
-  activated: boolean
-  passed: boolean
+  id: number;
+  description: string;
+  link: string;
+  activated: boolean;
+  passed: boolean;
 }
 
 export interface DocumentBodyCreate {
@@ -23,9 +23,8 @@ export interface DocumentBodyCreate {
   methodology: string;
   resourse: string;
   resultFinal: string;
-  studentId: number;
-  institutionId: number;
+  StudentId: number;
+  InstitutionId: number;
   courses: number[];
   teachers: number[];
 }
-

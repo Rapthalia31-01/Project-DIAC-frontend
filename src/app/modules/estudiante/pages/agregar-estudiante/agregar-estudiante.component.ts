@@ -8,9 +8,11 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-agregar-estudiante',
   templateUrl: './agregar-estudiante.component.html',
-  styleUrls: ['./agregar-estudiante.component.css']
+  styleUrls: ['./agregar-estudiante.component.css'],
 })
 export class AgregarEstudianteComponent implements OnInit {
+  otraProvincia = false;
+  otraCiudad = false;
 
   estudianteFrom: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
@@ -30,41 +32,68 @@ export class AgregarEstudianteComponent implements OnInit {
     course: ['', Validators.required],
     paralelo: ['', Validators.required],
     añolectivo: ['', Validators.required],
+  });
 
-  })
+  constructor(
+    private estudianteService: EstudianteService,
+    private fb: FormBuilder
+  ) {}
 
-  constructor(private estudianteService: EstudianteService, private fb: FormBuilder) { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  otraProvinciaFunc() {
+    if (this.estudianteFrom.value.Provincia == '') {
+      this.otraProvincia = true;
+      this.estudianteFrom.value.Provincia = '';
+    } else {
+      this.otraProvincia = false;
+    }
+  }
+  otraCiudadFunc() {
+    if (this.estudianteFrom.value.ciudad == '') {
+      this.otraCiudad = true;
+      this.estudianteFrom.value.ciudad = '';
+    } else {
+      this.otraCiudad = false;
+    }
   }
 
   validCampo(campo: string) {
-    if (this.estudianteFrom.controls[campo].errors && this.estudianteFrom.controls[campo].touched) {
-      return { messagge: `El campo ${campo} es obligatorio`, valid: false }
-    }
-    else {
-      return { messagge: null, valid: true }
+    if (
+      this.estudianteFrom.controls[campo].errors &&
+      this.estudianteFrom.controls[campo].touched
+    ) {
+      return { messagge: `El campo ${campo} es obligatorio`, valid: false };
+    } else {
+      return { messagge: null, valid: true };
     }
   }
 
   validSelect(campo: string) {
-    if ((!this.estudianteFrom.controls[campo].value || this.estudianteFrom.controls[campo].value === '0') && this.estudianteFrom.controls[campo].touched) {
-      return { messagge: `El campo ${campo} es obligatorio`, valid: false }
+    if (
+      (!this.estudianteFrom.controls[campo].value ||
+        this.estudianteFrom.controls[campo].value === '0') &&
+      this.estudianteFrom.controls[campo].touched
+    ) {
+      return { messagge: `El campo ${campo} es obligatorio`, valid: false };
     } else {
-      return { messagge: null, valid: true }
+      return { messagge: null, valid: true };
     }
   }
 
   guardarEstudianteConfirm() {
-    const nombre = this.estudianteFrom.value.nombre
-    const apellido = this.estudianteFrom.value.apellido
+    const nombre = this.estudianteFrom.value.nombre;
+    const apellido = this.estudianteFrom.value.apellido;
 
     if (this.estudianteFrom.invalid) {
-      this.estudianteFrom.markAllAsTouched()
-      return
+      this.estudianteFrom.markAllAsTouched();
+      return;
     }
-    if (!(this.validSelect('ciudad').valid) || !(this.validSelect('Provincia').valid)) {
-      return
+    if (
+      !this.validSelect('ciudad').valid ||
+      !this.validSelect('Provincia').valid
+    ) {
+      return;
     }
 
     Swal.fire({
@@ -76,13 +105,10 @@ export class AgregarEstudianteComponent implements OnInit {
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.guardarEstudiante()
+        this.guardarEstudiante();
       }
-    })
-
-
+    });
   }
-
 
   guardarEstudiante() {
     const estudiante: StudentBodyCreate = {
@@ -103,19 +129,18 @@ export class AgregarEstudianteComponent implements OnInit {
       course: this.estudianteFrom.value.course,
       parallel: this.estudianteFrom.value.paralelo,
       schoolYear: this.estudianteFrom.value.añolectivo,
-    }
+    };
 
-    this.estudianteService.addEstudiante(estudiante)
-      .subscribe({
-        next: (resp) => console.log(resp),
-        error: (err) => {
-          Swal.fire('Error al realizar el registro', '', 'error')
-        },
-        complete: () => {
-          Swal.fire('Estudiante Guardado', '', 'success')
-          this.estudianteFrom.reset()
-        }
-      })
+    this.estudianteService.addEstudiante(estudiante).subscribe({
+      next: (resp) => console.log(resp),
+      error: (err) => {
+        Swal.fire('Error al realizar el registro', '', 'error');
+      },
+      complete: () => {
+        Swal.fire('Estudiante Guardado', '', 'success');
+        this.estudianteFrom.reset();
+        this.otraProvincia = false;
+      },
+    });
   }
-
 }
